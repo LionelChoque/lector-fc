@@ -1,0 +1,589 @@
+Comencemos a crear el dominio de proyecto, arquitectura, definicion de tecnologias.
+Comenzaré contandote de que se trata, y la idea es que vallas requiriendo mas informacion de mi parte (del usuario) para tener una acercamiento mas acertado del proyecto y sus funcionalidades.
+se trata de una webapp para la lectura de Facturas de compras, que se pueda tener una correcta lectura de los detalles, de todas las propiedades que la componen.
+La precision en esta etapa es clave, conciderando que las facturas pueden tener diferentes diseños.
+Va a estar enfocada para servicio para empresas o particulares.
+Los formatos que se van a procesar van a ser generalmente en pdf, tambien en formato imagen. Incluiría la funcion de scaneo con periferico para subir el documento y procesarlo (camara de telefono, pdf o imagen).
+Debe soportar multiples hojas, de un mismo documento.
+La informacion a recuperar es bastante, vamos a lo basico:
+Validacion de si está emitida a nuestra a Empresa cliente (Nuestra empresa)
+Validación de si es una factura, tipo de factura (factura A B C, otras, Nota de crédito, debito, otros comprobantes) agente externo o nacional.
+Fecha, punto de venta y numero de factura
+Datos de proveedor, nombre, razon social, CUIT, otros datos fiscales.
+Items de produtos: codigo, descripcion, cantidad, precio unitario, importe, demas detalles de producto.
+Subtotales, descuentos o recargos, total y CAE.
+Estos datos se pretenden persistir en local, pero la idea es que se pueda integrar a diferentes software para comunicar los datos obtenidos.
+Posteriormente, se hara una validacion de los productos de sofware para validarlos
+haremos la version de tratamiento para decenas de facrturas.
+Es nuestro valor agregado que sea 100% automaatizado, con un proceso de verificacion cuando no se tenga la suficiente certeza de precision.
+si, me refiereo a integrar a otros erp, es decir abrir una api para ello, o tecnologia de comunicacion
+Por servicio cloud, no lo sé, actualmente trabajamos con hosting en hostinguer y sus servicios. el procesamiento debe ser en tiempo real, con opcion a procesado por lotes.
+Se subiran individualmente, pero un documento puede contener mas de una pagina.
+API rest con webhooks, pero dime tu, que es mejor, pensando en iterar a sistema inteligente.
+desarrollaremos la aplicacion en Replit, por lo que te dejo su documentacion para que veas cuales son las teconologias adoptadas y como podemos hacer uso de ello para desarrollar nuestra aplicacion, ademas puedas comenzar a generar la documentacion del dominio
+https://docs.replit.com/getting-started/intro-replit
+Arquitectura Propuesta para Sistema de Procesamiento de Facturas
+Stack Tecnológico en Replit:
+Backend:
+
+Python + FastApi: Ideal para APIs REST y bien soportado en Replit con templates predefinidos ReplitReplit
+PostgreSQL: Base de datos nativa de Replit (powered by Neon) con 10GB de almacenamiento Replit DocsReplit
+Bibliotecas de procesamiento:
+
+Tesseract + OpenCV para OCR básico
+PyPDF2/pdfplumber para extracción de texto de PDFs
+Pillow para procesamiento de imágenes
+spaCy para procesamiento de lenguaje natural
+
+
+
+Frontend:
+
+HTML/CSS/JavaScript vanilla o React (ambos soportados con templates) Developer Frameworks - Replit
+Drag & Drop para subida de archivos
+Preview de documentos procesados
+
+Deployment:
+
+Autoscale Deployments: Para manejo dinámico de carga, ideal para procesamiento en tiempo real Replit DocsReplit
+API REST con webhooks para integraciones con ERPs Replit Docs
+
+
+Documentación del Dominio - Sistema de Procesamiento de Facturas
+1. Visión General del Proyecto
+Nombre: InvoiceReader AI
+Propósito: Sistema automatizado de lectura y procesamiento de facturas argentinas con integración ERP
+2. Casos de Uso Principales
+UC001: Subida y Procesamiento de Documento
+
+Actor: Usuario (empresa/particular)
+Precondición: Usuario autenticado
+Flujo:
+
+Usuario sube documento (PDF/imagen/escaneado)
+Sistema valida formato y calidad
+Sistema procesa OCR + NLP
+Sistema extrae datos estructurados
+Sistema valida confianza de extracción
+
+
+Postcondición: Datos listos para revisión/integración
+
+UC002: Validación Manual
+
+Trigger: Confianza de procesamiento < 95%
+Flujo: Interfaz de corrección manual con campos pre-completados
+
+UC003: Integración ERP
+
+Método: API REST + Webhooks
+Formatos: JSON estructurado
+
+3. Modelo de Datos
+python# Entidades principales
+class Empresa:
+    id: int
+    nombre: str
+    cuit: str
+    configuraciones: dict
+
+class Documento:
+    id: int
+    empresa_id: int
+    archivo_original: str
+    tipo_documento: str  # 'factura_a', 'factura_b', etc.
+    estado: str  # 'procesando', 'completado', 'requiere_validacion'
+    confianza_procesamiento: float
+    fecha_subida: datetime
+    fecha_procesamiento: datetime
+
+class DatosFactura:
+    documento_id: int
+    # Datos del emisor
+    proveedor_nombre: str
+    proveedor_cuit: str
+    proveedor_direccion: str
+    
+    # Datos de la factura
+    numero_factura: str
+    punto_venta: str
+    fecha_emision: date
+    tipo_factura: str
+    cae: str
+    
+    # Totales
+    subtotal: decimal
+    descuentos: decimal
+    recargos: decimal
+    total: decimal
+    
+    # Validaciones
+    es_valida_empresa: bool
+    es_formato_correcto: bool
+
+class ItemFactura:
+    factura_id: int
+    codigo_producto: str
+    descripcion: str
+    cantidad: decimal
+    precio_unitario: decimal
+    importe_total: decimal
+4. Arquitectura de Componentes
+Capa de Presentación:
+
+Interfaz web responsive
+API REST para integraciones
+Dashboard de monitoreo
+
+Capa de Lógica de Negocio:
+
+Procesador OCR
+Validador de datos
+Motor de reglas de negocio
+Gestor de integraciones
+
+Capa de Persistencia:
+
+PostgreSQL con ORM (SQLAlchemy) Replit Docs
+Almacenamiento de archivos
+
+5. Flujo de Procesamiento
+
+Ingesta: Upload → Validación → Queue
+Procesamiento: OCR → Extracción → Estructuración
+Validación: Reglas de negocio → Scoring de confianza
+Persistencia: Base de datos → Archivos
+Integración: API/Webhook → ERP destino
+
+Preguntas para el siguiente paso:
+
+¿Quieres que comience desarrollando un MVP básico con Replit Agent?
+¿Prefieres que empecemos por la interfaz de usuario o por el procesamiento backend?
+¿Tienes ejemplos de facturas reales que pueda usar para entrenar el sistema de extracción?
+
+¿Te parece bien esta propuesta arquitectónica aprovechando las capacidades nativas de Replit?ReintentarAbien, ahora genera  la documentacion del proyecto como base conocimiento de lo conversadoEditarDocumentación del Proyecto InvoiceReader AI
+1. Información General del Proyecto
+1.1 Descripción
+InvoiceReader AI es una aplicación web para el procesamiento automatizado de facturas de compra, diseñada para empresas y particulares que necesitan digitalizar y estructurar información de documentos fiscales argentinos.
+1.2 Objetivos
+
+Automatizar al 100% la lectura de facturas con validación manual cuando sea necesario
+Soportar múltiples formatos: PDF, imágenes, escaneado directo
+Procesar documentos multi-página
+Integrar con sistemas ERP existentes
+Proporcionar precisión en la extracción de datos fiscales argentinos
+
+1.3 Alcance
+
+Volumen inicial: Decenas de facturas por procesamiento
+Usuarios objetivo: Empresas y particulares
+Tipos de documentos: Facturas A, B, C, Notas de crédito/débito, otros comprobantes
+Geografía: Argentina (validaciones fiscales locales)
+
+
+2. Arquitectura Técnica
+2.1 Plataforma de Desarrollo
+
+Entorno: Replit (desarrollo y deployment)
+Tipo de deployment: Autoscale Deployments para procesamiento en tiempo real
+Base de datos: PostgreSQL nativa de Replit (powered by Neon)
+
+2.2 Stack Tecnológico
+Backend
+
+Framework: Python + FastApi
+Base de datos: PostgreSQL (10GB almacenamiento)
+ORM: SQLAlchemy
+Procesamiento de documentos:
+
+Tesseract OCR + OpenCV
+PyPDF2/pdfplumber (extracción PDF)
+Pillow (procesamiento imágenes)
+spaCy (procesamiento lenguaje natural)
+
+
+
+Frontend
+
+Tecnología: HTML/CSS/JavaScript vanilla o React
+Funcionalidades:
+
+Drag & drop para subida de archivos
+Preview de documentos
+Interfaz de validación manual
+Dashboard de monitoreo
+
+
+
+Integración
+
+APIs: REST + Webhooks
+Formatos de salida: JSON estructurado
+Comunicación: Asíncrona para ERPs
+
+
+3. Modelo de Datos
+3.1 Entidades Principales
+Empresa
+pythonclass Empresa:
+    id: int                    # Identificador único
+    nombre: str               # Razón social
+    cuit: str                 # CUIT de la empresa cliente
+    configuraciones: dict     # Configuraciones específicas
+    fecha_creacion: datetime
+    activa: bool
+Documento
+pythonclass Documento:
+    id: int                           # Identificador único
+    empresa_id: int                   # FK a Empresa
+    archivo_original: str             # Path al archivo original
+    nombre_archivo: str               # Nombre original del archivo
+    tipo_documento: str               # 'factura_a', 'factura_b', 'nota_credito', etc.
+    estado: str                       # 'procesando', 'completado', 'requiere_validacion', 'error'
+    confianza_procesamiento: float    # 0.0 a 1.0
+    fecha_subida: datetime
+    fecha_procesamiento: datetime
+    paginas_total: int                # Número total de páginas
+    usuario_subida: str
+Datos de Factura
+pythonclass DatosFactura:
+    id: int
+    documento_id: int                 # FK a Documento
+    
+    # Validaciones iniciales
+    es_valida_empresa: bool          # ¿Está emitida a nuestra empresa?
+    es_formato_correcto: bool        # ¿Es una factura válida?
+    
+    # Datos del proveedor/emisor
+    proveedor_nombre: str
+    proveedor_razon_social: str
+    proveedor_cuit: str
+    proveedor_direccion: str
+    proveedor_otros_datos: json      # Otros datos fiscales
+    
+    # Datos de la factura
+    tipo_factura: str                # A, B, C, etc.
+    numero_factura: str
+    punto_venta: str
+    fecha_emision: date
+    cae: str                         # Código de Autorización Electrónica
+    tipo_agente: str                 # 'nacional', 'externo'
+    
+    # Totales
+    subtotal: decimal
+    descuentos: decimal
+    recargos: decimal
+    total: decimal
+    
+    # Metadatos
+    fecha_creacion: datetime
+    fecha_actualizacion: datetime
+Item de Factura
+pythonclass ItemFactura:
+    id: int
+    factura_id: int                  # FK a DatosFactura
+    
+    # Datos del producto/servicio
+    codigo_producto: str
+    descripcion: str
+    cantidad: decimal
+    precio_unitario: decimal
+    importe_total: decimal
+    
+    # Detalles adicionales
+    detalle_adicional: json          # Otros detalles del producto
+    
+    # Orden en la factura
+    orden_item: int
+Validación Manual
+pythonclass ValidacionManual:
+    id: int
+    documento_id: int                # FK a Documento
+    campo_validado: str              # Nombre del campo corregido
+    valor_original: str              # Valor extraído automáticamente
+    valor_corregido: str             # Valor corregido manualmente
+    usuario_validador: str
+    fecha_validacion: datetime
+    comentarios: str
+3.2 Relaciones
+
+Una Empresa puede tener múltiples Documentos
+Un Documento tiene una DatosFactura
+Una DatosFactura puede tener múltiples ItemFactura
+Un Documento puede tener múltiples ValidacionManual
+
+
+4. Casos de Uso
+4.1 UC001: Subida y Procesamiento de Documento
+Actor: Usuario (empresa/particular)
+Precondición: Usuario autenticado en el sistema
+Trigger: Usuario selecciona documento para procesar
+Flujo Principal:
+
+Usuario accede a la interfaz de subida
+Usuario arrastra/selecciona archivo (PDF, JPG, PNG)
+Sistema valida formato y tamaño del archivo
+Sistema crea registro en base de datos (estado: 'procesando')
+Sistema inicia procesamiento OCR
+Sistema extrae texto y aplica NLP para estructurar datos
+Sistema valida datos extraídos contra reglas de negocio
+Sistema calcula score de confianza
+Si confianza >= 95%: marca como 'completado'
+Si confianza < 95%: marca como 'requiere_validacion'
+Sistema notifica al usuario del resultado
+
+Flujo Alternativo - Error:
+
+5a. Si OCR falla, marca documento como 'error'
+6a. Si no se pueden extraer datos mínimos, solicita validación manual
+
+Postcondición:
+
+Documento procesado y almacenado
+Datos estructurados disponibles para integración
+
+4.2 UC002: Validación Manual
+Actor: Usuario validador
+Precondición: Documento en estado 'requiere_validacion'
+Trigger: Usuario accede a cola de validación
+Flujo Principal:
+
+Sistema muestra lista de documentos pendientes
+Usuario selecciona documento para validar
+Sistema muestra interfaz de validación con:
+
+Imagen/PDF original
+Campos extraídos automáticamente
+Campos marcados con baja confianza resaltados
+
+
+Usuario corrige campos necesarios
+Usuario confirma validación
+Sistema actualiza datos y marca como 'completado'
+Sistema registra cambios en tabla de validaciones
+
+Postcondición: Documento validado y listo para integración
+4.3 UC003: Integración con ERP
+Actor: Sistema ERP externo
+Precondición: Documento en estado 'completado'
+Trigger: Webhook o consulta API
+Flujo Principal (Webhook):
+
+Sistema detecta documento completado
+Sistema prepara payload JSON con datos estructurados
+Sistema envía webhook a URL configurada del ERP
+ERP procesa datos y responde con confirmación
+Sistema registra integración exitosa
+
+Flujo Principal (API REST):
+
+ERP consulta endpoint /api/facturas/pendientes
+Sistema responde con lista de facturas nuevas
+ERP solicita detalle específico /api/facturas/{id}
+Sistema responde con datos completos
+ERP marca factura como procesada via /api/facturas/{id}/mark_processed
+
+Postcondición: Datos integrados en sistema ERP de destino
+
+5. Requerimientos Funcionales
+5.1 Procesamiento de Documentos
+
+RF001: El sistema debe soportar archivos PDF, JPG, PNG
+RF002: El sistema debe procesar documentos multi-página
+RF003: El sistema debe soportar escaneado directo (cámara)
+RF004: El sistema debe extraer automáticamente todos los campos definidos
+RF005: El sistema debe validar si la factura está emitida a la empresa correcta
+
+5.2 Extracción de Datos
+
+RF006: Extraer tipo de factura (A, B, C, nota de crédito, etc.)
+RF007: Extraer fecha, punto de venta y número de factura
+RF008: Extraer datos completos del proveedor (nombre, CUIT, dirección)
+RF009: Extraer items de productos con todos sus detalles
+RF010: Extraer subtotales, descuentos, recargos, total y CAE
+
+5.3 Validación y Calidad
+
+RF011: Calcular score de confianza para cada extracción
+RF012: Habilitar validación manual cuando confianza < 95%
+RF013: Validar formato de CUIT según AFIP
+RF014: Validar coherencia de totales matemáticos
+
+5.4 Integración
+
+RF015: Exponer API REST para consulta de datos
+RF016: Soportar webhooks para notificaciones automáticas
+RF017: Generar formato JSON estructurado para integración
+RF018: Permitir configuración de endpoints por empresa
+
+
+6. Requerimientos No Funcionales
+6.1 Rendimiento
+
+RNF001: Procesar documento simple en < 30 segundos
+RNF002: Soportar hasta 50 documentos en cola simultáneamente
+RNF003: Tiempo de respuesta de API < 2 segundos
+
+6.2 Disponibilidad
+
+RNF004: Disponibilidad del sistema > 99% (aprovechando Replit Autoscale)
+RNF005: Recuperación automática ante fallos de procesamiento
+
+6.3 Seguridad
+
+RNF006: Encriptación de datos sensibles en base de datos
+RNF007: Autenticación obligatoria para todos los endpoints
+RNF008: Logs de auditoría para todas las operaciones
+
+6.4 Escalabilidad
+
+RNF009: Arquitectura preparada para evolución a cientos de documentos
+RNF010: Capacidad de agregar nuevos tipos de documentos
+
+
+7. Flujo de Procesamiento Detallado
+7.1 Pipeline de Procesamiento
+[Upload] → [Validación] → [OCR] → [NLP] → [Estructuración] → [Validación] → [Persistencia] → [Integración]
+7.2 Etapas Específicas
+Etapa 1: Ingesta
+
+Validación de formato de archivo
+Validación de tamaño (máx 10MB por archivo)
+Detección de número de páginas
+Creación de registro en BD
+
+Etapa 2: Pre-procesamiento
+
+Conversión de imágenes a formato estándar
+Mejora de calidad de imagen (contraste, resolución)
+Extracción de páginas individuales para PDFs
+
+Etapa 3: OCR
+
+Aplicación de Tesseract para extracción de texto
+Detección de regiones de texto estructuradas
+Generación de coordenadas para cada elemento
+
+Etapa 4: Procesamiento NLP
+
+Identificación de patrones de facturas argentinas
+Extracción de entidades (fechas, números, montos)
+Validación de formato de CUIT
+Extracción de tablas de items
+
+Etapa 5: Estructuración
+
+Mapeo a modelo de datos definido
+Cálculo de totales y validaciones matemáticas
+Asignación de scores de confianza por campo
+
+Etapa 6: Validación de Negocio
+
+Verificación de empresa destinataria
+Validación de CAE (si aplicable)
+Coherencia de datos fiscales
+
+
+8. API Specification
+8.1 Endpoints Principales
+Documentos
+POST   /api/documentos/upload          # Subir nuevo documento
+GET    /api/documentos/{id}            # Obtener documento específico
+GET    /api/documentos                 # Listar documentos
+PUT    /api/documentos/{id}/validar    # Validar documento manualmente
+Facturas
+GET    /api/facturas                   # Listar facturas procesadas
+GET    /api/facturas/{id}              # Obtener factura específica
+GET    /api/facturas/pendientes        # Facturas listas para ERP
+POST   /api/facturas/{id}/mark_processed # Marcar como procesada por ERP
+Webhooks
+POST   /api/webhooks/configure         # Configurar webhook de empresa
+GET    /api/webhooks/test              # Probar webhook configurado
+8.2 Ejemplo de Respuesta JSON
+json{
+  "documento_id": 123,
+  "estado": "completado",
+  "confianza": 0.96,
+  "datos_factura": {
+    "tipo_factura": "A",
+    "numero_factura": "0001-00001234",
+    "fecha_emision": "2025-01-15",
+    "proveedor": {
+      "nombre": "Proveedor Ejemplo S.A.",
+      "cuit": "30-12345678-9",
+      "direccion": "Av. Ejemplo 123, CABA"
+    },
+    "items": [
+      {
+        "codigo": "PROD001",
+        "descripcion": "Producto de ejemplo",
+        "cantidad": 2,
+        "precio_unitario": 100.00,
+        "importe": 200.00
+      }
+    ],
+    "totales": {
+      "subtotal": 200.00,
+      "descuentos": 0.00,
+      "total": 242.00
+    },
+    "cae": "12345678901234"
+  }
+}
+
+9. Plan de Implementación
+9.1 Fase 1: MVP (4 semanas)
+
+Interfaz básica de upload
+OCR básico con Tesseract
+Modelo de datos core
+Extracción básica de campos principales
+
+9.2 Fase 2: Validación (3 semanas)
+
+Interfaz de validación manual
+Scoring de confianza
+Validaciones de negocio
+Dashboard de monitoreo
+
+9.3 Fase 3: Integración (3 semanas)
+
+API REST completa
+Sistema de webhooks
+Documentación de API
+Testing de integración
+
+9.4 Fase 4: Optimización (2 semanas)
+
+Mejoras de precisión OCR
+Optimización de performance
+Monitoreo y métricas
+Documentación final
+
+
+10. Consideraciones de Implementación en Replit
+10.1 Ventajas de la Plataforma
+
+Setup automático del entorno
+PostgreSQL integrado
+Deployment automático
+Colaboración en tiempo real
+
+10.2 Limitaciones a Considerar
+
+Límite de 10GB en base de datos
+Almacenamiento de archivos en filesystem no persistente
+Necesidad de usar storage externo para archivos grandes
+
+10.3 Configuración Específica
+python# Configuración FastApi para Replit
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)
+10.4 Variables de Entorno
+
+DATABASE_URL: Conexión automática a PostgreSQL
+REPLIT_DB_URL: Base de datos clave-valor adicional
+Configuración de límites de procesamiento
+
+
+Esta documentación servirá como base de conocimiento para todo el desarrollo del proyecto InvoiceReader AI en la plataforma Replit.

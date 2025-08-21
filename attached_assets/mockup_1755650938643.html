@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvoiceReader AI - Mockups de Interfaz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .mockup-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mockup-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .mockup-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .mockup-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .screen {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .screen:hover {
+            transform: translateY(-5px);
+        }
+
+        .screen-header {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .traffic-lights {
+            display: flex;
+            gap: 6px;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red { background: #ff5f57; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #28ca42; }
+
+        .screen-title {
+            font-weight: 600;
+            color: #334155;
+            margin-left: 10px;
+        }
+
+        .screen-content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .logo::before {
+            content: "📄";
+            font-size: 1.8rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-bell {
+            background: #f1f5f9;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .notification-bell::before {
+            content: "🔔";
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .stat-trend {
+            color: #10b981;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+
+        /* Upload Zone Styles */
+        .upload-zone {
+            border: 3px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.6;
+        }
+
+        .upload-text {
+            font-size: 1.125rem;
+            color: #334155;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .file-types {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .file-type {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .browse-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .browse-btn:hover {
+            background: #5a67d8;
+        }
+
+        /* Processing Status */
+        .processing-list {
+            space-y: 15px;
+        }
+
+        .processing-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .file-meta {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-processing {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-validation {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 4px;
+            background: #f1f5f9;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
+        /* Validation Interface */
+        .validation-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 500px;
+        }
+
+        .document-preview {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-placeholder {
+            color: #64748b;
+            text-align: center;
+        }
+
+        .validation-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 5px;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .confidence-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 4px;
+            background: #f1f5f9;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .confidence-high { background: #10b981; }
+        .confidence-medium { background: #f59e0b; }
+        .confidence-low { background: #ef4444; }
+
+        .confidence-text {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        /* API Integration */
+        .api-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .endpoint-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .endpoint-header {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .http-method {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .method-get { background: #dcfce7; color: #166534; }
+        .method-post { background: #dbeafe; color: #1e40af; }
+        .method-put { background: #fef3c7; color: #92400e; }
+
+        .endpoint-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .endpoint-body {
+            padding: 15px;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.75rem;
+            overflow-x: auto;
+        }
+
+        /* Analytics Dashboard */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .chart-placeholder {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .recent-activity {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .activity-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .screens-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .validation-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mockup-container">
+        <header class="mockup-header">
+            <h1>InvoiceReader AI</h1>
+            <p>Mockups de Interfaz - Sistema de Procesamiento Automatizado de Facturas</p>
+        </header>
+
+        <div class="screens-grid">
+            <!-- Dashboard Principal -->
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="screen-title">Dashboard Principal</div>
+                </div>
+                <div class="screen-content">
+                    <nav class="dashboard-nav">
+                        <div class="logo">
+                            InvoiceReader AI
+                        </div>
+                        <div class="user-menu">
+                            <div class="notification-bell">
+                                <div class="notification-dot"></div>
+                            </div>
+                            <div class="user-avatar">JD</div>
+                        </div>
+                    </nav>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">247</div>
+                            <div class="stat-label">Facturas Procesadas</div>
+                            <div class="stat-trend">↗ +12% este mes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">96.5%</div>
+                            <div class="stat-label">Precisión Promedio</div>
+                            <div class="stat-trend">↗ +2.1% mejora</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Pendientes Validación</div>
+                            <div class="stat-trend">↓ -5 vs ayer</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">23s</div>
+                            <div class="stat-label">Tiempo Promedio</div>
+                            <div class="stat-trend">↓ -8s optimización</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-placeholder">
+                        📊 Gráfico de Procesamiento Semanal
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3 style="margin-bottom: 15px; color: #1e293b;">Actividad Reciente</h3>
+                        <div class="activity-item">
+                            <div class="activity-icon">✅</div>
+                            <div class="activity-text">Factura FC-001234 procesada exitosamente</div>
+                            <div class="activity-time">hace 2 min</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">⚠️</div>
+                            <div class="activity-text">Factura FC-001233 requiere validación manual</div>
+                            <div class="activity-time">hace 15 min</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">📤</div>
+                            <div class="activity-text">Datos enviados a ERP via webhook</div>
+                            <div class="activity-time">hace 1 hora</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subida de Documentos -->
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="screen-title">Subida de Documentos</div>
+                </div>
+                <div class="screen-content">
+                    <h2 style="margin-bottom: 20px; color: #1e293b;">Nuevo Documento</h2>
+                    
+                    <div class="upload-zone">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-text">Arrastra tus facturas aquí</div>
+                        <div class="upload-subtext">o haz clic para seleccionar archivos</div>
+                        <button class="browse-btn">Examinar Archivos</button>
+                        
+                        <div class="file-types">
+                            <span class="file-type">PDF</span>
+                            <span class="file-type">JPG</span>
+                            <span class="file-type">PNG</span>
+                            <span class="file-type">Multi-página</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                        <button class="btn btn-primary" style="flex: 1;">
+                            📷 Usar Cámara
+                        </button>
+                        <button class="btn btn-secondary" style="flex: 1;">
+                            📁 Desde Galería
+                        </button>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <h4 style="color: #1e293b; margin-bottom: 8px;">💡 Consejos para mejores resultados:</h4>
+                        <ul style="color: #64748b; font-size: 0.875rem; margin-left: 20px;">
+                            <li>Asegúrate de que el texto esté claramente visible</li>
+                            <li>Evita sombras o reflejos en el documento</li>
+                            <li>Sube todas las páginas de la factura</li>
+                            <li>Formato recomendado: PDF o imágenes de alta calidad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado de Procesamiento -->
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="screen-title">Estado de Procesamiento</div>
+                </div>
+                <div class="screen-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #1e293b;">Documentos en Cola</h2>
+                        <button class="btn btn-primary">Procesar Lote</button>
+                    </div>
+
+                    <div class="processing-list">
+                        <div class="processing-item">
+                            <div class="file-icon">📄</div>
+                            <div class="file-info">
+                                <div class="file-name">factura_proveedor_001.pdf</div>
+                                <div class="file-meta">2.3 MB • 2 páginas • Subido hace 1 min</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <span class="status-badge status-processing">Procesando</span>
+                        </div>
+
+                        <div class="processing-item">
+                            <div class="file-icon">✅</div>
+                            <div class="file-info">
+                                <div class="file-name">factura_servicios_002.pdf</div>
+                                <div class="file-meta">1.8 MB • 1 página • Procesado hace 5 min</div>
+                                <div style="font-size: 0.75rem; color: #059669; margin-top: 2px;">
+                                    ✓ Proveedor: TechCorp S.A. • Total: $45,250.00 • Confianza: 98%
+                                </div>
+                            </div>
+                            <div style="width: 100px; text-align: center; color: #059669; font-size: 0.875rem;">
+                                Completado
+                            </div>
+                            <span class="status-badge status-completed">Listo</span>
+                        </div>
+
+                        <div class="processing-item">
+                            <div class="file-icon">⚠️</div>
+                            <div class="file-info">
+                                <div class="file-name">factura_materiales_003.jpg</div>
+                                <div class="file-meta">4.1 MB • 1 página • Procesado hace 20 min</div>
+                                <div style="font-size: 0.75rem; color: #dc2626; margin-top: 2px;">
+                                    ⚠ CUIT del proveedor requiere verificación • Confianza: 67%
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">
+                                Validar
+                            </button>
+                            <span class="status-badge status-validation">Requiere Validación</span>
+                        </div>
+
+                        <div class="processing-item">
+                            <div class="file-icon">📊</div>
+                            <div class="file-info">
+                                <div class="file-name">nota_credito_004.pdf</div>
+                                <div class="file-meta">1.2 MB • 1 página • En cola</div>
+                            </div>
+                            <div style="width: 100px; text-align: center; color: #64748b; font-size: 0.875rem;">
+                                En cola
+                            </div>
+                            <span class="status-badge" style="background: #f1f5f9; color: #64748b;">Pendiente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interfaz de Validación Manual -->
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="screen-title">Validación Manual</div>
+                </div>
+                <div class="screen-content">
+                    <h2 style="margin-bottom: 20px; color: #1e293b;">Validar Datos Extraídos</h2>
+                    
+                    <div class="validation-container">
+                        <div class="document-preview">
+                            <div class="preview-placeholder">
+                                <div style="font-size: 4rem; margin-bottom: 10px;">📄</div>
+                                <div>Vista previa del documento</div>
+                                <div style="font-size: 0.875rem; color: #94a3b8;">factura_materiales_003.jpg</div>
+                            </div>
+                        </div>
+
+                        <div class="validation-form">
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Documento</label>
+                                <select class="form-input">
+                                    <option>Factura A</option>
+                                    <option>Factura B</option>
+                                    <option selected>Factura C</option>
+                                    <option>Nota de Crédito</option>
+                                </select>
+                                <div class="confidence-indicator">
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-high" style="width: 95%;"></div>
+                                    </div>
+                                    <span class="confidence-text">95%</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">CUIT Proveedor</label>
+                                <input type="text" class="form-input" value="20-12345678-9" style="border-color: #ef4444;">
+                                <div class="confidence-indicator">
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-low" style="width: 67%;"></div>
+                                    </div>
+                                    <span class="confidence-text" style="color: #ef4444;">67% - Verificar</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Razón Social</label>
+                                <input type="text" class="form-input" value="Materiales Construcción SA">
+                                <div class="confidence-indicator">
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-medium" style="width: 83%;"></div>
+                                    </div>
+                                    <span class="confidence-text">83%</span>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div class="form-group">
+                                    <label class="form-label">Número</label>
+                                    <input type="text" class="form-input" value="0001-00001234">
+                                    <div class="confidence-indicator">
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill confidence-high" style="width: 92%;"></div>
+                                        </div>
+                                        <span class="confidence-text">92%</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Fecha</label>
+                                    <input type="date" class="form-input" value="2025-08-15">
+                                    <div class="confidence-indicator">
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill confidence-high" style="width: 98%;"></div>
+                                        </div>
+                                        <span class="confidence-text">98%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Total</label>
+                                <input type="text" class="form-input" value="$ 15,750.00">
+                                <div class="confidence-indicator">
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-high" style="width: 96%;"></div>
+                                    </div>
+                                    <span class="confidence-text">96%</span>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">✓ Aprobar y Procesar</button>
+                                <button class="btn btn-secondary">↻ Re-procesar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API y Integraciones -->
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="screen-title">API e Integraciones</div>
+                </div>
+                <div class="screen-content">
+                    <div class="api-section">
+                        <div class="section-title">📡 Endpoints Principales</div>
+                        
+                        <div class="endpoint-card">
+                            <div class="endpoint-header">
+                                <span class="http-method method-post">POST</span>
+                                <span class="endpoint-path">/api/documentos/upload</span>
+                            </div>
+                            <div class="endpoint-body">
+                                Subir nuevo documento para procesamiento
+                            </div>
+                        </div>
+
+                        <div class="endpoint-card">
+                            <div class="endpoint-header">
+                                <span class="http-method method-get">GET</span>
+                                <span class="endpoint-path">/api/facturas/pendientes</span>
+                            </div>
+                            <div class="endpoint-body">
+                                Obtener facturas listas para integración ERP
+                            </div>
+                        </div>
+
+                        <div class="endpoint-card">
+                            <div class="endpoint-header">
+                                <span class="http-method method-get">GET</span>
+                                <span class="endpoint-path">/api/facturas/{id}</span>
+                            </div>
+                            <div class="endpoint-body">
+                                Obtener datos completos de una factura específica
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="api-section">
+                        <div class="section-title">📋 Ejemplo de Respuesta JSON</div>
+                        <div class="code-block">
+{
+  "documento_id": 123,
+  "estado": "completado",
+  "confianza": 0.96,
+  "datos_factura": {
+    "tipo_factura": "A",
+    "numero_factura": "0001-00001234",
+    "fecha_emision": "2025-01-15",
+    "proveedor": {
+      "nombre": "TechCorp S.A.",
+      "cuit": "30-12345678-9",
+      "direccion": "Av. Córdoba 1234, CABA"
+    },
+    "items": [
+      {
+        "codigo": "SERV001",
+        "descripcion": "Servicios de consultoría",
+        "cantidad": 1,
+        "precio_unitario": 45250.00,
+        "importe": 45250.00
+      }
+    ],
+    "totales": {
+      "subtotal": 45250.00,
+      "descuentos": 0.00,
+      "total": 54752.50
+    },
+    "cae": "12345678901234"
+  }
+}
+                        </div>
+                    </div>
+
+                    <div class="api-section">
+                        <div class="section-title">⚙️ Configuración Webhook</div>
+                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;">
+                            <input type="url" class="form-input" placeholder="https://tu-erp.com/webhook/facturas" value="https://empresa-demo.com/api/invoices">
+                            <button class="btn btn-primary">Probar</button>
+                        </div>
+                        <div style="margin-top: 10px; padding: 10px; background: #d1fae5; border-radius: 6px; color: #065f46; font-size: 0.875rem;">
+                            ✅ Última sincronización exitosa: hace 2 minutos
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics y Reportes -->
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="screen-title">Analytics y Reportes</div>
+                </div>
+                <div class="screen-content">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">1,247</div>
+                            <div class="metric-label">Total Procesados</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">96.8%</div>
+                            <div class="metric-label">Precisión General</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">18.5s</div>
+                            <div class="metric-label">Tiempo Promedio</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">4.2%</div>
+                            <div class="metric-label">Tasa de Validación</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                        <div>
+                            <h3 style="margin-bottom: 15px; color: #1e293b;">📈 Procesamiento por Día</h3>
+                            <div class="chart-placeholder">
+                                Gráfico de barras - Documentos procesados últimos 7 días
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 15px; color: #1e293b;">🎯 Precisión por Tipo</h3>
+                            <div style="space-y: 10px;">
+                                <div style="margin-bottom: 10px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="font-size: 0.875rem;">Factura A</span>
+                                        <span style="font-size: 0.875rem; font-weight: 600;">98.2%</span>
+                                    </div>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-high" style="width: 98.2%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 10px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="font-size: 0.875rem;">Factura B</span>
+                                        <span style="font-size: 0.875rem; font-weight: 600;">95.7%</span>
+                                    </div>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-high" style="width: 95.7%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 10px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="font-size: 0.875rem;">Factura C</span>
+                                        <span style="font-size: 0.875rem; font-weight: 600;">94.1%</span>
+                                    </div>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-high" style="width: 94.1%;"></div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 10px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="font-size: 0.875rem;">Nota Crédito</span>
+                                        <span style="font-size: 0.875rem; font-weight: 600;">91.3%</span>
+                                    </div>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill confidence-high" style="width: 91.3%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                        <h3 style="margin-bottom: 15px; color: #1e293b;">📊 Reportes Disponibles</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <button class="btn btn-secondary">📄 Reporte Mensual</button>
+                            <button class="btn btn-secondary">📈 Análisis de Precisión</button>
+                            <button class="btn btn-secondary">⏱️ Tiempos de Procesamiento</button>
+                            <button class="btn btn-secondary">🔄 Log de Integraciones</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: white; opacity: 0.8;">
+            <p>🚀 InvoiceReader AI - Sistema completo de procesamiento automatizado de facturas</p>
+            <p style="font-size: 0.875rem; margin-top: 5px;">Diseñado para máxima eficiencia y precisión en el procesamiento de documentos fiscales argentinos</p>
+        </div>
+    </div>
+</body>
+</html>

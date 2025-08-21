@@ -1,0 +1,498 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvoiceReader AI - Procesamiento Inteligente de Facturas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'brand': {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.0.16/heroicons.min.css">
+    <style>
+        [data-mock="true"] { position: relative; }
+        [data-mock="true"]::after { 
+            content: attr(data-mock-label); 
+            position: absolute; 
+            top: -8px; 
+            right: -8px; 
+            background: #fbbf24; 
+            color: white; 
+            font-size: 10px; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            display: none; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- @COMPONENT: MainLayout [full application layout] -->
+    <div class="min-h-screen flex">
+        <!-- @COMPONENT: Sidebar [navigation and user context] -->
+        <aside class="w-64 bg-white shadow-sm border-r border-gray-200 flex flex-col">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-gray-900">InvoiceReader</h1>
+                        <p class="text-sm text-gray-500">AI Processing</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg bg-brand-50 text-brand-700 font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                    </svg>
+                    <span>Subir Documentos</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <span>Documentos</span>
+                    <span class="ml-auto bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full" data-bind="document.count">124</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Validación Manual</span>
+                    <span class="ml-auto bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full" data-bind="validation.pending">3</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>API & Integraciones</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center space-x-3 px-3 py-2">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-gray-700" data-bind="user.initials" data-mock="true">AC</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate" data-bind="user.name" data-mock="true">Ana Colmenares</p>
+                        <p class="text-xs text-gray-500 truncate" data-bind="company.name" data-mock="true">Distribuidora del Sur SA</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainContent [primary application content] -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- @COMPONENT: TopBar [header with actions and status] -->
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900">Subir Documentos</h2>
+                        <p class="text-sm text-gray-600">Procesa facturas, notas de crédito y otros comprobantes fiscales</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- @STATE: processingCount:number = 2 -->
+                        <div class="flex items-center space-x-2 text-sm text-gray-600">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                            <span data-bind="processing.count" data-mock="true">2 procesando</span>
+                        </div>
+                        <button class="bg-brand-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-600 transition-colors">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Nuevo Lote
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: TopBar -->
+
+            <!-- @COMPONENT: UploadArea [drag and drop file upload] -->
+            <div class="flex-1 p-6 overflow-auto">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Upload Zone -->
+                    <div class="bg-white rounded-xl shadow-sm border-2 border-dashed border-gray-300 hover:border-brand-400 transition-colors p-8 text-center mb-8" data-event="drop:handleFileUpload" data-implementation="Should handle drag and drop file upload">
+                        <div class="space-y-4">
+                            <div class="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto">
+                                <svg class="w-8 h-8 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900">Arrastra tus documentos aquí</h3>
+                                <p class="text-sm text-gray-600">o haz clic para seleccionar archivos</p>
+                            </div>
+                            <div class="flex justify-center">
+                                <button class="bg-brand-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-600 transition-colors">
+                                    Seleccionar Archivos
+                                </button>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Soporta PDF, JPG, PNG • Máximo 10MB por archivo • Hasta 20 páginas
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Queue -->
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900">Estado de Procesamiento</h3>
+                            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <span>Actualizado hace 5 segundos</span>
+                            </div>
+                        </div>
+
+                        <!-- @MAP: processingQueue.map(document => ( -->
+                        <!-- Processing Document Card -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" data-mock="true">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-16 bg-red-50 rounded border flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900" data-bind="document.fileName">factura_proveedor_123.pdf</h4>
+                                        <p class="text-sm text-gray-600" data-bind="document.uploadTime">Subido hace 2 minutos</p>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                <div class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse mr-1"></div>
+                                                Procesando OCR
+                                            </span>
+                                            <span class="text-xs text-gray-500" data-bind="document.pages">3 páginas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-600">Progreso de procesamiento</span>
+                                    <span class="font-medium" data-bind="document.progress">65%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Completed Document Card -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" data-mock="true">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-16 bg-green-50 rounded border flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900" data-bind="document.fileName">factura_electronica_001.pdf</h4>
+                                        <p class="text-sm text-gray-600" data-bind="document.processedTime">Procesado hace 15 minutos</p>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                Completado
+                                            </span>
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800" data-bind="document.confidence">
+                                                98% Confianza
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-brand-600 hover:text-brand-800 text-sm font-medium">Ver Detalles</button>
+                                    <button class="text-gray-400 hover:text-gray-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Extracted Data Preview -->
+                            <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                                <h5 class="font-medium text-gray-900">Datos Extraídos</h5>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-600">Proveedor:</span>
+                                        <p class="font-medium" data-bind="invoice.providerName" data-mock="true">Tecnología Digital SRL</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">CUIT:</span>
+                                        <p class="font-mono font-medium" data-bind="invoice.providerCuit" data-mock="true">30-71234567-8</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Tipo:</span>
+                                        <p class="font-medium" data-bind="invoice.type" data-mock="true">Factura A</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Número:</span>
+                                        <p class="font-mono font-medium" data-bind="invoice.number" data-mock="true">0001-00001234</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Fecha:</span>
+                                        <p class="font-medium" data-bind="invoice.date" data-mock="true">15/12/2024</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Total:</span>
+                                        <p class="font-bold text-green-600" data-bind="invoice.total" data-mock="true">$125,430.50</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Requires Validation Card -->
+                        <div class="bg-white rounded-lg shadow-sm border border-amber-200 p-6" data-mock="true">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-16 bg-amber-50 rounded border flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900" data-bind="document.fileName">scan_factura_manual.jpg</h4>
+                                        <p class="text-sm text-gray-600" data-bind="document.processedTime">Procesado hace 30 minutos</p>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                Requiere Validación
+                                            </span>
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800" data-bind="document.confidence">
+                                                72% Confianza
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 transition-colors" data-event="click:openValidation">
+                                        Validar Ahora
+                                    </button>
+                                    <button class="text-gray-400 hover:text-gray-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Validation Issues -->
+                            <div class="bg-amber-50 rounded-lg p-4 space-y-3">
+                                <h5 class="font-medium text-gray-900 flex items-center">
+                                    <svg class="w-4 h-4 text-amber-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Campos que requieren revisión
+                                </h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center justify-between p-2 bg-white rounded border">
+                                        <span class="text-gray-700">CUIT del proveedor</span>
+                                        <span class="text-red-600 font-medium">No detectado</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 bg-white rounded border">
+                                        <span class="text-gray-700">Total de la factura</span>
+                                        <span class="text-amber-600 font-medium">Baja confianza</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: UploadArea -->
+        </main>
+        <!-- @END_COMPONENT: MainContent -->
+    </div>
+    <!-- @END_COMPONENT: MainLayout -->
+
+    <!-- @COMPONENT: ValidationModal [modal for manual data validation] -->
+    <div id="validationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" data-event="click:closeModal">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden" data-event="click:stopPropagation">
+                <div class="flex h-full">
+                    <!-- Document Preview -->
+                    <div class="w-1/2 bg-gray-100 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Vista del Documento</h3>
+                        <div class="bg-white rounded-lg shadow-sm h-full min-h-96 flex items-center justify-center">
+                            <!-- A scanned invoice document with highlighted sections for validation -->
+                            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" alt="Scanned invoice document" class="max-w-full h-auto rounded" data-mock-image="true" data-implementation="Use document viewer component here">
+                        </div>
+                    </div>
+                    
+                    <!-- Validation Form -->
+                    <div class="w-1/2 p-6 overflow-y-auto">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900">Validación Manual</h3>
+                            <button class="text-gray-400 hover:text-gray-600" data-event="click:closeModal">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form class="space-y-6" data-event="submit:handleValidation">
+                            <!-- Proveedor Section -->
+                            <div class="space-y-4">
+                                <h4 class="font-medium text-gray-900 border-b border-gray-200 pb-2">Datos del Proveedor</h4>
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Razón Social</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" value="Tecnología Digital SRL" data-bind="validation.providerName" data-mock="true">
+                                        <div class="flex items-center mt-1">
+                                            <svg class="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="text-xs text-green-600">Alta confianza (95%)</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">CUIT</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50" placeholder="Ingrese CUIT del proveedor" data-bind="validation.providerCuit" data-mock="true">
+                                        <div class="flex items-center mt-1">
+                                            <svg class="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="text-xs text-red-600">No detectado - Requerido</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Factura Section -->
+                            <div class="space-y-4">
+                                <h4 class="font-medium text-gray-900 border-b border-gray-200 pb-2">Datos de la Factura</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" data-bind="validation.invoiceType">
+                                            <option value="factura_a" selected>Factura A</option>
+                                            <option value="factura_b">Factura B</option>
+                                            <option value="factura_c">Factura C</option>
+                                            <option value="nota_credito">Nota de Crédito</option>
+                                            <option value="nota_debito">Nota de Débito</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Número</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 font-mono" value="0001-00001234" data-bind="validation.invoiceNumber" data-mock="true">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+                                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" value="2024-12-15" data-bind="validation.invoiceDate" data-mock="true">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Total</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-amber-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-amber-50" value="125,430.50" data-bind="validation.invoiceTotal" data-mock="true">
+                                        <div class="flex items-center mt-1">
+                                            <svg class="w-4 h-4 text-amber-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="text-xs text-amber-600">Confianza media (72%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                                <button type="button" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:closeModal">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="px-6 py-2 bg-brand-500 text-white rounded-lg font-medium hover:bg-brand-600 transition-colors">
+                                    Guardar Validación
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: ValidationModal -->
+
+    <script>
+        (function() {
+            // TODO: Implement business logic, API calls, or state management
+            
+            // Simple modal handling for demonstration
+            function openValidationModal() {
+                document.getElementById('validationModal').classList.remove('hidden');
+            }
+            
+            function closeValidationModal() {
+                document.getElementById('validationModal').classList.add('hidden');
+            }
+            
+            // Attach event listeners
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('[data-event*="openValidation"]')) {
+                    openValidationModal();
+                }
+                
+                if (e.target.closest('[data-event*="closeModal"]')) {
+                    closeValidationModal();
+                }
+            });
+            
+            // Prevent modal close when clicking inside modal content
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('[data-event*="stopPropagation"]')) {
+                    e.stopPropagation();
+                }
+            });
+            
+            // Close modal when clicking backdrop
+            document.getElementById('validationModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeValidationModal();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
