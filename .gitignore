@@ -33,6 +33,7 @@ uploads/
 /attached_assets/*.jpg
 /attached_assets/*.jpeg
 /attached_assets/*.png
+/attached_assets/*.txt
 
 # Excepciones: mantener archivos de ejemplo específicos
 !test/data/*.pdf
