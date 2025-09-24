@@ -1,6 +1,220 @@
-node_modules
-dist
+# Lector de Facturas Inteligente - Configuración .gitignore
+
+# ==========================================
+# DEPENDENCIAS Y MODULOS
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# ARCHIVOS DE CONSTRUCCIÓN Y DISTRIBUCIÓN  
+# ==========================================
+dist/
+build/
+out/
+.output/
+.vite/
+.next/
+
+# ==========================================
+# ARCHIVOS SUBIDOS POR USUARIOS
+# ==========================================
+uploads/
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+/attached_assets/*.pdf
+/attached_assets/*.jpg
+/attached_assets/*.jpeg
+/attached_assets/*.png
+
+# Excepciones: mantener archivos de ejemplo específicos
+!test/data/*.pdf
+!docs/examples/*.pdf
+
+# ==========================================
+# VARIABLES DE ENTORNO Y CONFIGURACIÓN
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.production
+
+# Configuraciones locales específicas
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# BASES DE DATOS Y ALMACENAMIENTO LOCAL
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+database.db
+/db/*.sqlite
+
+# Cache de Drizzle ORM
+.drizzle/
+drizzle/
+
+# ==========================================
+# LOGS Y ARCHIVOS TEMPORALES
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ==========================================
+# CACHE Y ARCHIVOS TEMPORALES
+# ==========================================
+.cache/
+.parcel-cache/
+.vite-cache/
+.turbo/
+.vercel/
+.netlify/
+
+# Cache de imágenes generadas
+image-cache/
+.image-cache/
+document-images/
+
+# ==========================================
+# CONFIGURACIONES DE DESARROLLO
+# ==========================================
+# TypeScript
+*.tsbuildinfo
+
+# ESLint cache
+.eslintcache
+
+# Prettier cache
+.prettier-cache
+
+# ==========================================
+# ARCHIVOS DE SISTEMA OPERATIVO
+# ==========================================
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
 .DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ==========================================
+# CLAVES API Y ARCHIVOS SENSIBLES
+# ==========================================
+# Anthropic API keys
+anthropic-key.txt
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Google Cloud credentials
+google-credentials.json
+service-account.json
+*-credentials.json
+
+# ==========================================
+# ARCHIVOS DE TESTING Y COVERAGE
+# ==========================================
+coverage/
+.coverage
+.nyc_output/
+*.lcov
+
+# Jest
+jest-results.xml
+jest-coverage/
+
+# ==========================================
+# ARCHIVOS DE BACKUP
+# ==========================================
+*.backup
+*.bak
+*.tmp
+backup/
+backups/
+
+# ==========================================
+# REPLIT Y DEPLOYMENT
+# ==========================================
+.replit
+replit.nix
+.config/
+
+# ==========================================
+# DOCUMENTACIÓN GENERADA
+# ==========================================
+docs/build/
+docs/dist/
+typedoc/
+api-docs/
+
+# ==========================================
+# ARCHIVOS ESPECÍFICOS DEL PROYECTO
+# ==========================================
+# Logs de procesamiento de documentos
+processing-logs/
+agent-logs/
+
+# Datos de entrenamiento ML
+training-data/
+ml-models/
+*.model
+
+# Archivos de configuración local de agentes
+agent-configs.local.json
+custom-prompts.json

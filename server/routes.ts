@@ -1,3 +1,35 @@
+/**
+ * Sistema de Rutas API - Lector de Facturas Inteligente
+ * 
+ * Este módulo contiene todas las rutas de la API REST para el sistema de procesamiento
+ * de facturas con IA. Incluye endpoints para:
+ * 
+ * 📄 DOCUMENTOS:
+ * - Subida y gestión de archivos (PDF, imágenes)
+ * - Procesamiento inteligente con múltiples agentes
+ * - Descarga y visualización de documentos
+ * 
+ * 🤖 AGENTES IA:
+ * - Configuración de agentes especializados
+ * - Métricas y monitoreo en tiempo real
+ * - Sistema orquestado multi-agente
+ * 
+ * 🧠 MACHINE LEARNING:
+ * - Correcciones de campo para entrenamiento
+ * - Patrones de reconocimiento automático
+ * - Sesiones de feedback del usuario
+ * 
+ * 🇦🇷 FACTURAS ARGENTINAS:
+ * - Validación de CUIT, CAE, condición fiscal
+ * - Extracción de IVA y percepciones
+ * - Punto de venta y fechas de vencimiento
+ * 
+ * 🌍 COMERCIO INTERNACIONAL:
+ * - HS Codes y clasificación arancelaria
+ * - Incoterms y términos de envío
+ * - Información bancaria internacional
+ */
+
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
@@ -20,8 +52,22 @@ import fs from 'fs/promises';
 import multer from 'multer';
 import path from 'path';
 
+/**
+ * Registra todas las rutas de la API en la aplicación Express
+ * 
+ * @param app - Instancia de Express donde registrar las rutas
+ * @returns Servidor HTTP configurado
+ */
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Configure multer for file uploads
+  
+  /**
+   * CONFIGURACIÓN DE MULTER PARA SUBIDA DE ARCHIVOS
+   * 
+   * Configura el almacenamiento local para archivos subidos con:
+   * - Nombres únicos para evitar conflictos
+   * - Directorio dedicado 'uploads/'
+   * - Preservación de extensiones originales
+   */
   const storage_multer = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/') // Directorio donde se guardarán los archivos
@@ -33,6 +79,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * Configuración de Multer con validaciones de seguridad
+   * - Límite de 10MB por archivo
+   * - Solo permite PDFs e imágenes
+   * - Filtrado por tipo MIME para seguridad
+   */
   const upload = multer({ 
     storage: storage_multer,
     limits: {
@@ -48,9 +100,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Mock user middleware for now (replace with real auth later)
+  /**
+   * MIDDLEWARE DE AUTENTICACIÓN TEMPORAL
+   * 
+   * En producción, esto sería reemplazado por autenticación real
+   * usando JWT, sessions, o providers como Auth0
+   */
   app.use((req, res, next) => {
-    // In a real app, this would come from session/JWT
+    // En una app real, esto vendría de session/JWT
     req.user = { id: 'mock-user-id' };
     next();
   });
